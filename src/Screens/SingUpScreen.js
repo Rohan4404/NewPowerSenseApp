@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     position: "relative",
-    marginBottom: height * 0.02,
+    // marginBottom: height * 0.02,
   },
   input: {
     width: "100%",
@@ -292,6 +292,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ffffff",
+    marginBottom: height * 0.02,
     color: "#ffffff",
     fontSize: width * 0.04 > 16 ? 16 : width * 0.04,
     backgroundColor: "transparent",

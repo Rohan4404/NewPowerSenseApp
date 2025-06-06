@@ -58,24 +58,24 @@ const SuperAdminScreen = () => {
     navigation.navigate("ShowAllClient");
   };
 
-  const handleHomeNavigationClick = async () => {
-    try {
-      const role = await AsyncStorage.getItem("role");
-      if (role === "admin") {
-        navigation.navigate("Admin");
-      } else if (role === "manager") {
-        navigation.navigate("SuperAdmin");
-      } else {
-        navigation.navigate("LoginScreen");
-      }
-    } catch (err) {
-      console.error("Error reading role:", err);
-      navigation.navigate("LoginScreen");
-    }
-    setIsSidebarVisible(false);
-  };
+  // const handleHomeNavigationClick = async () => {
+  //   try {
+  //     const role = await AsyncStorage.getItem("role");
+  //     if (role === "admin") {
+  //       navigation.navigate("Admin");
+  //     } else if (role === "manager") {
+  //       navigation.navigate("SuperAdmin");
+  //     } else {
+  //       navigation.navigate("LoginScreen");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error reading role:", err);
+  //     navigation.navigate("LoginScreen");
+  //   }
+  //   setIsSidebarVisible(false);
+  // };
 
-  const handleLogoutNavigation = async () => {
+  const handleLogoutClick = async () => {
     try {
       await AsyncStorage.multiRemove([
         "token",
@@ -86,30 +86,12 @@ const SuperAdminScreen = () => {
         "clientId",
         "savedEmailOrPhone",
       ]);
-
-      Toast.show({
-        position: "top",
-        text1: "Logged out successfully!",
-        type: "success",
-        visibilityTime: 2000,
-        topOffset: height * 0.1,
-      });
-
-      navigation.replace("LoginScreen");
+      navigation.replace("Login");
     } catch (err) {
       console.error("Logout error:", err);
-      Toast.show({
-        type: "error",
-        text1: "Error logging out.",
-        position: "top",
-        visibilityTime: 3000,
-        topOffset: height * 0.1,
-      });
-    } finally {
-      setIsSidebarVisible(false);
     }
+    setSidebarVisible(false);
   };
-
   useEffect(() => {
     let isMounted = true;
 
@@ -371,8 +353,8 @@ const SuperAdminScreen = () => {
       <Sidebar
         visible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}
-        handleHomeNavigation={handleHomeNavigationClick}
-        handleLogout={handleLogoutNavigation}
+        // handleHomeNavigation={handleHomeNavigationClick}
+        handleLogoutClick={handleLogoutClick}
       />
 
       {/* Main Content with Vertical Scroll */}

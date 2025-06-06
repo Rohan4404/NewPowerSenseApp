@@ -1214,6 +1214,7 @@ const AddMachinePage = ({ navigation }) => {
 
   const handleHomeNavigationClick = () => {
     navigation.goBack();
+    setIsSidebarVisible(false);
   };
 
   return (

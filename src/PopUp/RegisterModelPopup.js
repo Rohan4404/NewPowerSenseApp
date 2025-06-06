@@ -836,7 +836,7 @@ import Toast from "react-native-toast-message";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useNavigation } from "@react-navigation/native";
 import Sidebar from "../Components/Sidebar";
 import { Picker } from "@react-native-picker/picker";
 import { onboard } from "../api/Service";
@@ -844,6 +844,8 @@ import { onboard } from "../api/Service";
 const { width, height } = Dimensions.get("window");
 
 const RegisterModal = ({ onClose, setApiCall }) => {
+  const navigation = useNavigation();
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const {
     control,
     handleSubmit,
@@ -937,6 +939,28 @@ const RegisterModal = ({ onClose, setApiCall }) => {
     }
   };
 
+  const handleHomeNavigationClick = () => {
+    navigation.goBack();
+    navigation.goBack();
+    setIsSidebarVisible(false);
+  };
+  const handleLogoutClick = async () => {
+    try {
+      await AsyncStorage.multiRemove([
+        "token",
+        "sessionToken",
+        "userId",
+        "role",
+        "userID",
+        "clientId",
+        "savedEmailOrPhone",
+      ]);
+      navigation.replace("Login");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+    setSidebarVisible(false);
+  };
   return (
     <ImageBackground
       source={require("../../assets/Rectangle.jpg")}
@@ -965,8 +989,8 @@ const RegisterModal = ({ onClose, setApiCall }) => {
           <Sidebar
             visible={isSidebarVisible}
             onClose={() => setIsSidebarVisible(false)}
-            handleHomeNavigation={() => {}}
-            handleLogout={() => {}}
+            handleHomeClick={handleHomeNavigationClick}
+            handleLogoutClick={handleLogoutClick}
           />
 
           <KeyboardAvoidingView

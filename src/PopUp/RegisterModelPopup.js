@@ -815,6 +815,7 @@
 // });
 
 // export default RegisterModal;
+
 import React, { useState } from "react";
 import {
   View,
@@ -857,10 +858,11 @@ const RegisterModal = ({ onClose, setApiCall }) => {
     try {
       const response = await onboard(data);
 
+      console.log("Response from onboard API:", response, response.success);
       if (response && response.success) {
         Toast.show({
           type: "success",
-          text1: response.message || "Registered successfully",
+          text1: response.message || "Registered successfully ✅",
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.05,
@@ -875,16 +877,29 @@ const RegisterModal = ({ onClose, setApiCall }) => {
           },
         });
 
-        await AsyncStorage.setItem("userId", response.user?.id.toString());
+        await AsyncStorage.setItem(
+          "userId",
+          response.user?.id?.toString() || ""
+        );
 
-        reset();
+        // 👇 Reset form fields
+        reset({
+          organization_name: "",
+          gst_no: "",
+          address: "",
+          organization_type: "",
+          admin_name: "",
+          email: "",
+          phone_no: "",
+        });
+
         setTimeout(() => {
           onClose();
         }, 3000);
       } else {
         Toast.show({
           type: "error",
-          text1: response?.error || "Registration failed",
+          text1: response?.error || "Registration failed ❌",
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.05,
@@ -1158,7 +1173,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(44, 44, 44, 0.7)", // Semi-transparent header for readability
+    backgroundColor: "transparent", // Semi-transparent header for readability
     paddingHorizontal: width * 0.04,
     paddingTop: Platform.OS === "ios" ? 0 : height * 0.04, // Adjust padding for SafeAreaView on iOS
   },

@@ -12,6 +12,12 @@ import ForgetPasswordScreen from "./src/Screens/ForgetPasswordScreen";
 import ResetPasswordScreen from "./src/Screens/ResetPasswordScreen";
 import ShowAllClient from "./src/Screens/ShowAllClient";
 import SuperAdminTabBar from "./src/TabBar/SuperAdminTabBar";
+import MachineDetaild from "./src/Screens/MachineDetaild";
+import MachineCurrentScreen from "./src/MachineDataInfo/MachineCurrentScreen";
+import MachinePowerScreen from "./src/MachineDataInfo/MachinePowerScreen";
+import MachinePeakPowerScreen from "./src/MachineDataInfo/MachinePeakPowerScreen";
+import MachineUnitScreen from "./src/MachineDataInfo/MachineUnitScreen";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +25,9 @@ export default function App() {
   return (
     <NavigationContainer>
       {/* ✅ Use StatusBar as a component */}
-      <StatusBar style="auto" backgroundColor="#121212" />
+      <StatusBar style="auto" backgroundColor="#393939" />
+
+      {/* <StatusBar translucent backgroundColor="transparent" style="light" /> */}
 
       <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen
@@ -72,6 +80,31 @@ export default function App() {
         <Stack.Screen
           name="ShowAllClient"
           component={ShowAllClient}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MachineDetailPage"
+          component={MachineDetaild}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="currentConsumption"
+          component={MachineCurrentScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="powerConsumptions"
+          component={MachinePowerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="peakpowerconsumption"
+          component={MachinePeakPowerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="unitconsumption"
+          component={MachineUnitScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -208,12 +208,15 @@ const SuperAdminScreen = () => {
 
   const handleMachineCardClick = useCallback(
     (machine) => {
+      console.log("machine:", machine);
       console.log(`Clicked on ${machine.machine_name}`);
-      const fullApiUrl = `https://api1.systaldyn.svc:8080/api/v1/data/${machine.table_name}`;
+      const fullApiUrl = `https://api1.systaldyn.xyz:6901/api/sensor/data/${machine.table_name}`;
+
+      console.log("Full API URL:", fullApiUrl, machine.lon, machine.lon);
       navigation.navigate("MachineDetailPage", {
-        lat: machine.latitude || null,
-        lon: machine.longitude || null,
-        apiUrl: fullApiUrl,
+        lat: machine.lat || null,
+        lon: machine.lon || null,
+        endPoint: fullApiUrl,
       });
     },
     [navigation]
@@ -227,22 +230,6 @@ const SuperAdminScreen = () => {
   const selectedClientOrgName =
     clients.find((client) => client.client_id === (selectedClientId || "17"))
       ?.organization_name || "XYZ Corporation";
-
-  // const deleteMachineData = async (machineId, clientId) => {
-  //   try {
-  //     const responseData = await fetch(
-  //       `https://api1.systaldyn.xyz:6901/api/machine/${machineToDelete.machine_id}`,
-  //       {
-  //         method: "DELETE",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ clientId: clientId }),
-  //       }
-  //     );
-  //     return await responseData.json();
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
 
   const deleteMachineData = async (machineId, clientId) => {
     try {

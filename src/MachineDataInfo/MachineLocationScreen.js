@@ -83,7 +83,7 @@ const Machine1Location = ({ lat, lon }) => {
 const styles = StyleSheet.create({
   container: {
     height: height * 0.309, // roughly 35% of screen height
-    width: width - 34, // keeping your original intent but dynamic
+    width: width - 29, // keeping your original intent but dynamic
     justifyContent: "flex-end",
     alignItems: "center",
     borderRadius: width * 0.02, // responsive border radius

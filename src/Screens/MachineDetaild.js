@@ -143,20 +143,18 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: width * 0.02,
-    paddingBottom: height * 0.02,
+    // paddingBottom: height * 0.02,
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     position: "relative",
   },
   backButton: {
     position: "absolute",
-    top: height * 0.01,
-    left: width * 0.025,
+    top: Dimensions.get("window").height * 0.015, // 1.5% of screen height
+    left: Dimensions.get("window").width * 0.025, // 2.5% of screen width
     zIndex: 1,
   },
   backIcon: {
-    fontSize: width * 0.065,
-    width: width * 0.08,
-    height: width * 0.08,
+    fontSize: Dimensions.get("window").width * 0.06, // 6% of screen width
     tintColor: "#92F1F1",
     color: "#92F1F1",
   },

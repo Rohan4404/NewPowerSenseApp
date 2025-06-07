@@ -25,9 +25,9 @@ export default function App() {
   return (
     <NavigationContainer>
       {/* ✅ Use StatusBar as a component */}
-      <StatusBar style="auto" backgroundColor="#393939" />
+      {/* <StatusBar style="auto" backgroundColor="#393939" /> */}
 
-      {/* <StatusBar translucent backgroundColor="transparent" style="light" /> */}
+      <StatusBar translucent backgroundColor="transparent" style="light" />
 
       <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen

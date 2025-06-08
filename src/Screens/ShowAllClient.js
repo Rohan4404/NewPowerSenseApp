@@ -665,7 +665,7 @@ const styles = StyleSheet.create({
   },
   tableContainer: {
     flex: 0.89, // Reduced from flex: 1 to slightly decrease height
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    // backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: width * 0.02,
     marginBottom: height * 0.02,
     overflow: "hidden",

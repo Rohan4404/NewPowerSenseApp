@@ -41,7 +41,7 @@ const ShowAllClientData = () => {
     const fetchClients = async () => {
       try {
         const response = await getOnboardClient();
-        console.log(response, "response of show all is");
+        // console.log(response, "response of show all is");
 
         let clientData = [];
         if (Array.isArray(response)) {
@@ -71,9 +71,9 @@ const ShowAllClientData = () => {
     try {
       const role = await AsyncStorage.getItem("role");
       if (role === "admin") {
-        navigation.navigate("AdminDashboard");
+        navigation.navigate("AdminTabBar");
       } else if (role === "manager") {
-        navigation.navigate("SuperAdminDashboard");
+        navigation.navigate("SuperAdminTabBar");
       } else {
         navigation.navigate("Login");
       }

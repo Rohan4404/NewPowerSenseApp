@@ -1,4 +1,4 @@
-// import React, { useEffect, useState, useRef } from "react";
+// import { useEffect, useState, useRef } from "react";
 // import {
 //   View,
 //   Text,
@@ -153,7 +153,7 @@
 //   ) : null;
 // };
 
-// const AddMachinePage = ({ navigation }) => {
+// const AddMachineAdminPage = ({ navigation }) => {
 //   const [clients, setClients] = useState([]);
 //   const [formData, setFormData] = useState({
 //     clientId: "",
@@ -171,13 +171,9 @@
 //       setIsLoadingClients(true);
 //       try {
 //         const response = await getAllClients();
-//         console.log(
-//           "API Response (getAllClients):",
-//           JSON.stringify(response, null, 2)
-//         );
 
 //         if (response.success && Array.isArray(response.data)) {
-//           console.log("Clients fetched:", response.data);
+//           // console.log("Clients fetched:", response.data);
 //           setClients(response.data);
 //         } else {
 //           console.error("Invalid response:", response?.message || "No data");
@@ -287,7 +283,7 @@
 //         }
 //         if (data.results.length > 0) {
 //           const { lat, lng } = data.results[0].geometry;
-//           return { lat: parseFloat(lat), lon: parseFloat(lng) };
+//           return { lat: Number.parseFloat(lat), lon: Number.parseFloat(lng) };
 //         } else {
 //           console.log(`No results found for query: ${query}`);
 //           return null;
@@ -354,11 +350,11 @@
 //         topOffset: height * 0.05,
 //         text1Style: {
 //           fontSize: width * 0.04,
-//           color: "#FFFFFF",
+//           color: "#000000", // Changed to black for visibility
 //         },
 //         text2Style: {
 //           fontSize: width * 0.035,
-//           color: "#FFFFFF",
+//           color: "#000000", // Changed to black for visibility
 //         },
 //         style: {
 //           backgroundColor: "#000000",
@@ -383,11 +379,11 @@
 //           topOffset: height * 0.05,
 //           text1Style: {
 //             fontSize: width * 0.04,
-//             color: "#FFFFFF",
+//             color: "#000000", // Changed to black for visibility
 //           },
 //           text2Style: {
 //             fontSize: width * 0.035,
-//             color: "#FFFFFF",
+//             color: "#000000", // Changed to black for visibility
 //           },
 //           style: {
 //             backgroundColor: "#000000",
@@ -424,14 +420,23 @@
 //             color: "#000000",
 //           },
 //           style: {
-//             backgroundColor: "#009D9D",
+//             backgroundColor: "#00FFD1",
 //             borderWidth: 1,
 //             borderColor: "#2BFFFF",
 //           },
 //         });
-//         setFormData({ clientId: "", machine_name: "", address: "" }); // Reset form fields
-//         setErrors({}); // Clear any existing errors
-//         // navigation.goBack();
+
+//         // Reset form fields
+//         setFormData({ clientId: "", machine_name: "", address: "" });
+//         setErrors({});
+
+//         // Navigate to SuperAdminDashboard with refresh parameter
+//         setTimeout(() => {
+//           navigation.navigate("Home", {
+//             refresh: true,
+//             timestamp: Date.now(), // Force refresh
+//           });
+//         }, 2000);
 //       } else {
 //         Toast.show({
 //           type: "error",
@@ -442,11 +447,11 @@
 //           topOffset: height * 0.05,
 //           text1Style: {
 //             fontSize: width * 0.04,
-//             color: "#000000",
+//             color: "#000000", // Changed to black for visibility
 //           },
 //           text2Style: {
 //             fontSize: width * 0.035,
-//             color: "#000000",
+//             color: "#000000", // Changed to black for visibility
 //           },
 //           style: {
 //             backgroundColor: "#000000",
@@ -466,11 +471,11 @@
 //         topOffset: height * 0.05,
 //         text1Style: {
 //           fontSize: width * 0.04,
-//           color: "#FFFFFF",
+//           color: "#000000", // Changed to black for visibility
 //         },
 //         text2Style: {
 //           fontSize: width * 0.035,
-//           color: "#FFFFFF",
+//           color: "#000000", // Changed to black for visibility
 //         },
 //         style: {
 //           backgroundColor: "#000000",
@@ -749,12 +754,12 @@
 //   input: {
 //     width: "100%",
 //     paddingHorizontal: width * 0.02,
-//     paddingVertical: height * 0.01,
+//     paddingVertical: height * 0.02,
 //     borderRadius: width * 0.03,
 //     borderWidth: 1,
 //     borderColor: "#FFFFFF",
 //     color: "#FFFFFF",
-//     fontSize: width * 0.04,
+//     fontSize: width * 0.0385,
 //     backgroundColor: "rgba(255, 255, 255, 0.1)", // Slight background for visibility
 //   },
 //   errorBorder: {
@@ -828,9 +833,7 @@
 //   },
 // });
 
-// export default AddMachinePage;
-
-"use client";
+// export default AddMachineAdminPage;
 
 import { useEffect, useState, useRef } from "react";
 import {
@@ -855,7 +858,7 @@ import { Picker } from "@react-native-picker/picker";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Toast from "react-native-toast-message";
-import { getAllClients, addMachine } from "../api/Service";
+import { addMachine } from "../api/Service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("window");
@@ -918,30 +921,60 @@ const Sidebar = ({ visible, onClose, handleHomeClick, navigation }) => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("sessionToken");
-      await AsyncStorage.removeItem("userId");
-      await AsyncStorage.removeItem("userID");
-      await AsyncStorage.removeItem("clientId");
-      await AsyncStorage.removeItem("role");
-      await AsyncStorage.removeItem("savedEmailOrPhone");
+      await AsyncStorage.multiRemove([
+        "token",
+        "sessionToken",
+        "userId",
+        "userID",
+        "clientId",
+        "role",
+        "savedEmailOrPhone",
+      ]);
 
       Toast.show({
         type: "success",
-        text1: "Logged out successfully!",
+        text1: "Logged out successfully",
         position: "top",
-        autoHide: true,
         visibilityTime: 2000,
+        topOffset: height * 0.05,
+        text1Style: {
+          fontSize: width * 0.04,
+          color: "#000000",
+          fontWeight: "600",
+        },
+        style: {
+          backgroundColor: "#00FFD1",
+          borderWidth: 1,
+          borderColor: "#2BFFFF",
+          borderRadius: 8,
+        },
       });
 
       navigation.replace("Login");
     } catch (error) {
+      console.error("Logout error:", error);
       Toast.show({
         type: "error",
-        text1: "Error logging out. Please try again.",
+        text1: "Error logging out",
+        text2: String(error.message || "Please try again"),
         position: "top",
-        autoHide: true,
         visibilityTime: 3000,
+        topOffset: height * 0.05,
+        text1Style: {
+          fontSize: width * 0.04,
+          color: "#000000",
+          fontWeight: "600",
+        },
+        text2Style: {
+          fontSize: width * 0.035,
+          color: "#000000",
+        },
+        style: {
+          backgroundColor: "#000000",
+          borderWidth: 1,
+          borderColor: "#FF5555",
+          borderRadius: 8,
+        },
       });
     } finally {
       onClose();
@@ -998,100 +1031,88 @@ const Sidebar = ({ visible, onClose, handleHomeClick, navigation }) => {
     </View>
   ) : null;
 };
-
-const AddMachinePage = ({ navigation }) => {
-  const [clients, setClients] = useState([]);
+const AddMachineAdminPage = ({ navigation }) => {
+  const [clientId, setClientId] = useState(null);
   const [formData, setFormData] = useState({
-    clientId: "",
     machine_name: "",
     address: "",
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoadingClients, setIsLoadingClients] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const pickerRef = useRef(null);
 
+  // Fetch clientId from AsyncStorage
   useEffect(() => {
-    const fetchClients = async () => {
-      setIsLoadingClients(true);
+    const fetchClientId = async () => {
       try {
-        const response = await getAllClients();
-        // console.log(
-        //   "API Response (getAllClients):",
-        //   JSON.stringify(response, null, 2)
-        // );
-
-        if (response.success && Array.isArray(response.data)) {
-          // console.log("Clients fetched:", response.data);
-          setClients(response.data);
+        const storedClientId = await AsyncStorage.getItem("clientId");
+        if (storedClientId) {
+          setClientId(storedClientId);
         } else {
-          console.error("Invalid response:", response?.message || "No data");
+          console.warn("No clientId found in AsyncStorage");
           Toast.show({
             type: "error",
-            text1: "Failed to load clients",
+            text1: "No client ID found",
+            text2: "Please log in again",
             position: "top",
             visibilityTime: 3000,
             topOffset: height * 0.05,
             text1Style: {
               fontSize: width * 0.04,
-              color: "#FFFFFF",
+              color: "#000000",
+              fontWeight: "600",
+            },
+            text2Style: {
+              fontSize: width * 0.035,
+              color: "#000000",
             },
             style: {
               backgroundColor: "#000000",
               borderWidth: 1,
               borderColor: "#FF5555",
+              borderRadius: 8,
             },
           });
-          setClients([]);
         }
       } catch (error) {
-        console.error("Error fetching clients:", error.message);
+        console.error("Error fetching clientId from AsyncStorage:", error);
         Toast.show({
           type: "error",
-          text1: "Error loading clients",
+          text1: "Error fetching client ID",
+          text2: String(error.message || "An unexpected error occurred"),
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.05,
           text1Style: {
             fontSize: width * 0.04,
-            color: "#FFFFFF",
+            color: "#000000",
+            fontWeight: "600",
+          },
+          text2Style: {
+            fontSize: width * 0.035,
+            color: "#000000",
           },
           style: {
             backgroundColor: "#000000",
             borderWidth: 1,
             borderColor: "#FF5555",
+            borderRadius: 8,
           },
         });
-        setClients([]);
-      } finally {
-        setIsLoadingClients(false);
       }
     };
 
-    fetchClients();
-    return () => {
-      setClients([]);
-      setFormData({ clientId: "", machine_name: "", address: "" });
-      setErrors({});
-    };
+    fetchClientId();
   }, []);
 
   const handleChange = (name, value) => {
-    console.log(`Picker change: ${name} = ${value}`);
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
 
-  const openPicker = () => {
-    if (pickerRef.current) {
-      pickerRef.current.focus();
-    }
-  };
-
   const validate = () => {
     const newErrors = {};
-    if (!formData.clientId) newErrors.clientId = "Client is required";
+    if (!clientId) newErrors.clientId = "Client ID is required";
     if (!formData.machine_name)
       newErrors.machine_name = "Machine Name is required";
     if (!formData.address) newErrors.address = "Address is required";
@@ -1109,7 +1130,6 @@ const AddMachinePage = ({ navigation }) => {
         const encodedQuery = encodeURIComponent(query.trim());
         const apiKey = "a321107d1af841a3bb48f539f65e78dd";
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodedQuery}&key=${apiKey}&limit=1&no_annotations=1`;
-        console.log(`Fetching geocode for query: ${query}, URL: ${url}`);
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -1118,15 +1138,13 @@ const AddMachinePage = ({ navigation }) => {
           },
         });
         if (!response.ok) {
-          console.error(
-            `OpenCage API error: ${response.status} ${response.statusText}`
-          );
           const errorText = await response.text();
-          console.error(`Error response: ${errorText}`);
+          console.error(
+            `OpenCage API error: ${response.status} ${response.statusText}, Response: ${errorText}`
+          );
           return null;
         }
         const data = await response.json();
-        console.log(`OpenCage API Response for "${query}":`, data);
         if (data.status.code !== 200) {
           console.error(`OpenCage API status error: ${data.status.message}`);
           return null;
@@ -1134,10 +1152,8 @@ const AddMachinePage = ({ navigation }) => {
         if (data.results.length > 0) {
           const { lat, lng } = data.results[0].geometry;
           return { lat: Number.parseFloat(lat), lon: Number.parseFloat(lng) };
-        } else {
-          console.log(`No results found for query: ${query}`);
-          return null;
         }
+        return null;
       } catch (error) {
         console.error(`Error fetching geolocation for "${query}":`, error);
         return null;
@@ -1187,157 +1203,6 @@ const AddMachinePage = ({ navigation }) => {
     return null;
   };
 
-  // const handleSubmit = async () => {
-  //   const validationErrors = validate();
-  //   if (Object.keys(validationErrors).length > 0) {
-  //     setErrors(validationErrors);
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Validation Error",
-  //       text2: "Please fill in all required fields",
-  //       position: "top",
-  //       visibilityTime: 3000,
-  //       topOffset: height * 0.05,
-  //       text1Style: {
-  //         fontSize: width * 0.04,
-  //         color: "#FFFFFF",
-  //       },
-  //       text2Style: {
-  //         fontSize: width * 0.035,
-  //         color: "#FFFFFF",
-  //       },
-  //       style: {
-  //         backgroundColor: "#000000",
-  //         borderWidth: 1,
-  //         borderColor: "#FF5555",
-  //       },
-  //     });
-  //     return;
-  //   }
-
-  //   setIsSubmitting(true);
-  //   try {
-  //     const geoData = await getLatLonFromAddress(formData.address);
-  //     if (!geoData) {
-  //       Toast.show({
-  //         type: "error",
-  //         text1: "Invalid address",
-  //         text2:
-  //           "Please enter a valid address (e.g., Hapur, Uttar Pradesh, India).",
-  //         position: "top",
-  //         visibilityTime: 3000,
-  //         topOffset: height * 0.05,
-  //         text1Style: {
-  //           fontSize: width * 0.04,
-  //           color: "#FFFFFF",
-  //         },
-  //         text2Style: {
-  //           fontSize: width * 0.035,
-  //           color: "#FFFFFF",
-  //         },
-  //         style: {
-  //           backgroundColor: "#000000",
-  //           borderWidth: 1,
-  //           borderColor: "#FF5555",
-  //         },
-  //       });
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       client_id: formData.clientId,
-  //       machine_name: formData.machine_name,
-  //       lat: geoData.lat,
-  //       lon: geoData.lon,
-  //     };
-  //     console.log("Submitting payload:", payload);
-
-  //     const response = await addMachine(payload);
-  //     if (response.success) {
-  //       Toast.show({
-  //         type: "success",
-  //         text1: "Success",
-  //         text2: "Machine added successfully!",
-  //         position: "top",
-  //         visibilityTime: 2000,
-  //         topOffset: height * 0.05,
-  //         text1Style: {
-  //           fontSize: width * 0.04,
-  //           color: "#000000",
-  //         },
-  //         text2Style: {
-  //           fontSize: width * 0.035,
-  //           color: "#000000",
-  //         },
-  //         style: {
-  //           backgroundColor: "#009D9D",
-  //           borderWidth: 1,
-  //           borderColor: "#2BFFFF",
-  //         },
-  //       });
-
-  //       // Reset form fields
-  //       setFormData({ clientId: "", machine_name: "", address: "" });
-  //       setErrors({});
-
-  //       // Navigate to SuperAdminDashboard with refresh parameter
-  //       setTimeout(() => {
-  //         navigation.navigate("Home", {
-  //           refresh: true,
-  //           timestamp: Date.now(), // Force refresh by passing timestamp
-  //         });
-  //       }, 2000); // Wait for toast to show
-  //     } else {
-  //       Toast.show({
-  //         type: "error",
-  //         text1: "Failed to add machine",
-  //         text2: response.message || "Please try again.",
-  //         position: "top",
-  //         visibilityTime: 3000,
-  //         topOffset: height * 0.05,
-  //         text1Style: {
-  //           fontSize: width * 0.04,
-  //           color: "#000000",
-  //         },
-  //         text2Style: {
-  //           fontSize: width * 0.035,
-  //           color: "#000000",
-  //         },
-  //         style: {
-  //           backgroundColor: "#000000",
-  //           borderWidth: 1,
-  //           borderColor: "#000000",
-  //         },
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Submit error:", error.message);
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Error adding machine",
-  //       text2: error.message || "An unexpected error occurred.",
-  //       position: "top",
-  //       visibilityTime: 3000,
-  //       topOffset: height * 0.05,
-  //       text1Style: {
-  //         fontSize: width * 0.04,
-  //         color: "#000000",
-  //       },
-  //       text2Style: {
-  //         fontSize: width * 0.035,
-  //         color: "#000000",
-  //       },
-  //       style: {
-  //         backgroundColor: "#000000",
-  //         borderWidth: 1,
-  //         borderColor: "#FF5555",
-  //       },
-  //     });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
   const handleSubmit = async () => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -1345,22 +1210,25 @@ const AddMachinePage = ({ navigation }) => {
       Toast.show({
         type: "error",
         text1: "Validation Error",
-        text2: "Please fill in all required fields",
+        text2:
+          validationErrors.clientId || "Please fill in all required fields",
         position: "top",
         visibilityTime: 3000,
         topOffset: height * 0.05,
         text1Style: {
           fontSize: width * 0.04,
-          color: "#000000", // Changed to black for visibility
+          color: "#000000",
+          fontWeight: "600",
         },
         text2Style: {
           fontSize: width * 0.035,
-          color: "#000000", // Changed to black for visibility
+          color: "#000000",
         },
         style: {
           backgroundColor: "#000000",
           borderWidth: 1,
           borderColor: "#FF5555",
+          borderRadius: 8,
         },
       });
       return;
@@ -1374,34 +1242,35 @@ const AddMachinePage = ({ navigation }) => {
           type: "error",
           text1: "Invalid address",
           text2:
-            "Please enter a valid address (e.g., Hapur, Uttar Pradesh, India).",
+            "Please enter a valid address (e.g., Hapur, Uttar Pradesh, India)",
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.05,
           text1Style: {
             fontSize: width * 0.04,
-            color: "#000000", // Changed to black for visibility
+            color: "#000000",
+            fontWeight: "600",
           },
           text2Style: {
             fontSize: width * 0.035,
-            color: "#000000", // Changed to black for visibility
+            color: "#000000",
           },
           style: {
             backgroundColor: "#000000",
             borderWidth: 1,
             borderColor: "#FF5555",
+            borderRadius: 8,
           },
         });
         return;
       }
 
       const payload = {
-        client_id: formData.clientId,
+        client_id: clientId,
         machine_name: formData.machine_name,
         lat: geoData.lat,
         lon: geoData.lon,
       };
-      console.log("Submitting payload:", payload);
 
       const response = await addMachine(payload);
       if (response.success) {
@@ -1415,6 +1284,7 @@ const AddMachinePage = ({ navigation }) => {
           text1Style: {
             fontSize: width * 0.04,
             color: "#000000",
+            fontWeight: "600",
           },
           text2Style: {
             fontSize: width * 0.035,
@@ -1424,64 +1294,67 @@ const AddMachinePage = ({ navigation }) => {
             backgroundColor: "#00FFD1",
             borderWidth: 1,
             borderColor: "#2BFFFF",
+            borderRadius: 8,
           },
         });
 
-        // Reset form fields
-        setFormData({ clientId: "", machine_name: "", address: "" });
+        setFormData({ machine_name: "", address: "" });
         setErrors({});
 
-        // Navigate to SuperAdminDashboard with refresh parameter
         setTimeout(() => {
           navigation.navigate("Home", {
             refresh: true,
-            timestamp: Date.now(), // Force refresh
+            timestamp: Date.now(),
           });
         }, 2000);
       } else {
         Toast.show({
           type: "error",
           text1: "Failed to add machine",
-          text2: response.message || "Please try again.",
+          text2: String(response.message || "Please try again"),
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.05,
           text1Style: {
             fontSize: width * 0.04,
-            color: "#000000", // Changed to black for visibility
+            color: "#000000",
+            fontWeight: "600",
           },
           text2Style: {
             fontSize: width * 0.035,
-            color: "#000000", // Changed to black for visibility
+            color: "#000000",
           },
           style: {
             backgroundColor: "#000000",
             borderWidth: 1,
             borderColor: "#FF5555",
+            borderRadius: 8,
           },
         });
       }
     } catch (error) {
-      console.error("Submit error:", error.message);
+      console.error("Submit error:", error);
       Toast.show({
         type: "error",
         text1: "Error adding machine",
-        text2: error.message || "An unexpected error occurred.",
+        text2: String(error.message || "An unexpected error occurred"),
         position: "top",
         visibilityTime: 3000,
         topOffset: height * 0.05,
         text1Style: {
           fontSize: width * 0.04,
-          color: "#000000", // Changed to black for visibility
+          color: "#000000",
+          fontWeight: "600",
         },
         text2Style: {
           fontSize: width * 0.035,
-          color: "#000000", // Changed to black for visibility
+          color: "#000000",
         },
         style: {
           backgroundColor: "#000000",
           borderWidth: 1,
           borderColor: "#FF5555",
+          borderRadius: 8,
         },
       });
     } finally {
@@ -1530,64 +1403,6 @@ const AddMachinePage = ({ navigation }) => {
               <Text style={styles.mainTitle}>Add Machine</Text>
             </View>
             <View style={styles.form}>
-              {/* Client Picker */}
-              <View style={styles.inputContainer}>
-                <TouchableOpacity
-                  onPress={openPicker}
-                  style={[
-                    styles.pickerContainer,
-                    errors.clientId && styles.errorBorder,
-                  ]}
-                  disabled={isLoadingClients || clients.length === 0}
-                >
-                  {isLoadingClients ? (
-                    <View style={styles.loaderContainer}>
-                      <ActivityIndicator size="small" color="#FFFFFF" />
-                      <Text style={styles.loaderText}>Loading clients...</Text>
-                    </View>
-                  ) : (
-                    <Picker
-                      ref={pickerRef}
-                      selectedValue={formData.clientId}
-                      onValueChange={(value) => handleChange("clientId", value)}
-                      style={styles.picker}
-                      dropdownIconColor="#FFFFFF"
-                      mode="dropdown"
-                      enabled={!isLoadingClients && clients.length > 0}
-                      prompt="Select a Client"
-                    >
-                      <Picker.Item
-                        label="Select Client"
-                        value=""
-                        enabled={false}
-                      />
-                      {clients.length > 0 ? (
-                        clients.map((client) => (
-                          <Picker.Item
-                            key={client.client_id}
-                            label={
-                              client.organization_name ||
-                              `Client ${client.client_id}`
-                            }
-                            value={client.client_id}
-                            style={styles.pickerItem}
-                          />
-                        ))
-                      ) : (
-                        <Picker.Item
-                          label="No clients available"
-                          value=""
-                          enabled={false}
-                        />
-                      )}
-                    </Picker>
-                  )}
-                </TouchableOpacity>
-                {errors.clientId && (
-                  <Text style={styles.errorText}>{errors.clientId}</Text>
-                )}
-              </View>
-
               {/* Machine Name Input */}
               <View style={styles.inputContainer}>
                 <TextInput
@@ -1654,14 +1469,14 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay for readability
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "transparent", // Semi-transparent header for readability
+    backgroundColor: "transparent",
     paddingHorizontal: width * 0.04,
-    paddingTop: Platform.OS === "ios" ? 0 : height * 0.029, // Adjust for SafeAreaView on iOS
+    paddingTop: Platform.OS === "ios" ? 0 : height * 0.029,
   },
   logoImage: {
     width: width * 0.13,
@@ -1714,44 +1529,6 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: width * 1,
   },
-  pickerContainer: {
-    position: "relative",
-    width: "100%",
-    borderRadius: width * 0.03,
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Slight background for visibility
-  },
-  picker: {
-    width: "100%",
-    paddingHorizontal: width * 0.02,
-    borderRadius: width * 0.03,
-    color: "#FFFFFF",
-    backgroundColor: "transparent",
-    ...Platform.select({
-      ios: {
-        height: 150,
-      },
-      android: {
-        height: 50,
-      },
-    }),
-  },
-  pickerItem: {
-    fontSize: width * 0.04,
-    color: Platform.OS === "ios" ? "#FFFFFF" : "#000000",
-  },
-  loaderContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
-  },
-  loaderText: {
-    marginLeft: 10,
-    color: "#FFFFFF",
-    fontSize: width * 0.04,
-  },
   input: {
     width: "100%",
     paddingHorizontal: width * 0.02,
@@ -1761,7 +1538,7 @@ const styles = StyleSheet.create({
     borderColor: "#FFFFFF",
     color: "#FFFFFF",
     fontSize: width * 0.0385,
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Slight background for visibility
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   errorBorder: {
     borderColor: "#FF5555",
@@ -1817,18 +1594,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 30,
   },
-  // navItem: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginVertical: 15,
-  //   padding: 5,
-  //   borderRadius: 4,
-  // },
-  // navText: {
-  //   color: "#FFFFFF",
-  //   fontSize: 16,
-  //   marginLeft: 10,
-  // },
+  //   navItem: {
+  //     flexDirection: "row",
+  //     alignItems: "center",
+  //     marginVertical: 15,
+  //     padding: 5,
+  //     borderRadius: 4,
+  //   },
+  //   navText: {
+  //     color: "#FFFFFF",
+  //     fontSize: 16,
+  //     marginLeft: 10,
+  //   },
 
   navItem: {
     flexDirection: "row",
@@ -1850,4 +1627,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddMachinePage;
+export default AddMachineAdminPage;

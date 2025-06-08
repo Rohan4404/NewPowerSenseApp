@@ -343,8 +343,6 @@
 
 // export default ShowAllClientData;
 
-"use client";
-
 import { useEffect, useState, useCallback } from "react";
 import {
   View,
@@ -368,7 +366,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("window");
 
-const ShowAllClientData = ({ route }) => {
+const ShowAllClientData = ({ route, onClose }) => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -400,7 +398,7 @@ const ShowAllClientData = ({ route }) => {
       try {
         setLoading(true);
         const response = await getOnboardClient();
-        console.log(response, "response of show all is");
+        // console.log(response, "response of show all is");
 
         let clientData = [];
         if (Array.isArray(response)) {
@@ -634,7 +632,7 @@ const styles = StyleSheet.create({
     marginVertical: height * 0.02,
   },
   tableContainer: {
-    flex: 0.9, // Reduced from flex: 1 to slightly decrease height
+    flex: 0.89, // Reduced from flex: 1 to slightly decrease height
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: width * 0.02,
     marginBottom: height * 0.02,
@@ -652,7 +650,7 @@ const styles = StyleSheet.create({
   },
   verticalScroll: {
     flex: 1,
-    maxHeight: height * 0.9, // Reduced from height * 0.7
+    maxHeight: height * 0.7, // Reduced from height * 0.7
   },
   tableHeaderRow: {
     flexDirection: "row",

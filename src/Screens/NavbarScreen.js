@@ -30,9 +30,9 @@ const NavbarPage = () => {
     try {
       const role = await AsyncStorage.getItem("role");
       if (role === "admin") {
-        navigation.navigate("AdminDashboard");
+        navigation.navigate("AdminTabBar");
       } else if (role === "manager") {
-        navigation.navigate("SuperAdminDashboard");
+        navigation.navigate("SuperAdminTabBar");
       } else {
         navigation.navigate("Login");
       }

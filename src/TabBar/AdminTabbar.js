@@ -1,7 +1,7 @@
 // import React from "react";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import HomeScreen from "../Screens/SuperAdminScreen";
-// import AddMachine from "../PopUp/AddMachine";
+// import HomeScreen from "../Screens/AdminScreenDashbord";
+// import AddMachine from "../PopUp/AddMachineForAdmin";
 // import RegisterModelPopup from "../PopUp/RegisterModelPopup";
 // import ShowAllClient from "../Screens/ShowAllClient";
 // import Icon from "react-native-vector-icons/Ionicons";
@@ -10,92 +10,6 @@
 
 // const { width, height } = Dimensions.get("window");
 // const Tab = createBottomTabNavigator();
-
-// // export default function SuperAdminTabBar() {
-// //   const insets = useSafeAreaInsets();
-// //   const backgroundColor = "#2BFFFF"; // Fully opaque
-
-// //   return (
-// //     <View style={{ flex: 1, backgroundColor }}>
-// //       {Platform.OS === "android" && insets.bottom > 0 && (
-// //         <View
-// //           style={{
-// //             position: "absolute",
-// //             bottom: 0,
-// //             height: insets.bottom,
-// //             width: "100%",
-// //             backgroundColor,
-// //             zIndex: 100,
-// //           }}
-// //         />
-// //       )}
-
-// //       <Tab.Navigator
-// //         screenOptions={({ route }) => ({
-// //           headerShown: false,
-// //           tabBarShowLabel: false,
-// //           tabBarStyle: {
-// //             position: "absolute",
-// //             paddingTop: height * 0.01,
-// //             left: width * 0.03,
-// //             right: width * 0.03,
-// //             elevation: 0,
-// //             backgroundColor, // solid color now
-// //             borderTopLeftRadius: width * 0.04,
-// //             borderTopRightRadius: width * 0.04,
-// //             height: height * 0.09,
-// //           },
-// //           tabBarIcon: ({ focused }) => {
-// //             let iconName, label;
-// //             if (route.name === "Home") {
-// //               iconName = "home-outline";
-// //               label = "Home";
-// //             } else if (route.name === "AddMachine") {
-// //               iconName = "add-circle-outline";
-// //               label = "Add Machine";
-// //             } else if (route.name === "RegisterModelPopup") {
-// //               iconName = "log-in-outline";
-// //               label = "Onboarding";
-// //             } else if (route.name === "ShowAllClient") {
-// //               iconName = "people-outline";
-// //               label = "Show Clients";
-// //             }
-
-// //             return (
-// //               <View style={styles.tabItem}>
-// //                 <View
-// //                   style={[
-// //                     styles.iconWrapper,
-// //                     focused && styles.iconWrapperActive,
-// //                   ]}
-// //                 >
-// //                   <Icon name={iconName} size={width * 0.069} color="#FFFFFF" />
-// //                 </View>
-// //                 <Text
-// //                   numberOfLines={1}
-// //                   style={{
-// //                     fontSize: width * 0.03,
-// //                     color: focused ? "#00D1D1" : "#FFFFFF",
-// //                     marginTop: height * 0.002,
-// //                     width: width * 0.25,
-// //                     textAlign: "center",
-// //                   }}
-// //                 >
-// //                   {label}
-// //                 </Text>
-// //               </View>
-// //             );
-// //           },
-// //         })}
-// //       >
-// //         <Tab.Screen name="Home" component={HomeScreen} />
-// //         <Tab.Screen name="AddMachine" component={AddMachine} />
-// //         <Tab.Screen name="RegisterModelPopup" component={RegisterModelPopup} />
-// //         <Tab.Screen name="ShowAllClient" component={ShowAllClient} />
-// //       </Tab.Navigator>
-// //     </View>
-// //   );
-// // }
 
 // export default function SuperAdminTabBar() {
 //   const insets = useSafeAreaInsets();
@@ -125,14 +39,16 @@
 //           tabBarStyle: {
 //             position: "absolute",
 //             paddingTop: height * 0.01,
+//             paddingBottom: insets.bottom, // ✅ dynamic padding based on device
 //             left: width * 0.03,
 //             right: width * 0.03,
 //             elevation: 0,
-//             backgroundColor: backgroundColor, // semi-transparent
+//             backgroundColor: backgroundColor,
 //             borderTopLeftRadius: width * 0.04,
 //             borderTopRightRadius: width * 0.04,
-//             height: height * 0.09,
+//             height: height * 0.09 + insets.bottom, // ✅ dynamic total height
 //           },
+
 //           tabBarIcon: ({ focused }) => {
 //             let iconName, label;
 //             if (route.name === "Home") {
@@ -144,10 +60,11 @@
 //             } else if (route.name === "RegisterModelPopup") {
 //               iconName = "log-in-outline";
 //               label = "Onboarding";
-//             } else if (route.name === "ShowAllClient") {
-//               iconName = "people-outline";
-//               label = "Show Clients";
 //             }
+//             //  else if (route.name === "ShowAllClient") {
+//             //   iconName = "people-outline";
+//             //   label = "Show Clients";
+//             // }
 
 //             return (
 //               <View style={styles.tabItem}>
@@ -178,8 +95,8 @@
 //       >
 //         <Tab.Screen name="Home" component={HomeScreen} />
 //         <Tab.Screen name="AddMachine" component={AddMachine} />
-//         <Tab.Screen name="RegisterModelPopup" component={RegisterModelPopup} />
-//         <Tab.Screen name="ShowAllClient" component={ShowAllClient} />
+//         {/* <Tab.Screen name="RegisterModelPopup" component={RegisterModelPopup} /> */}
+//         {/* <Tab.Screen name="ShowAllClient" component={ShowAllClient} /> */}
 //       </Tab.Navigator>
 //     </View>
 //   );
@@ -204,12 +121,12 @@
 
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../Screens/SuperAdminScreen";
-import AddMachine from "../PopUp/AddMachine";
+import HomeScreen from "../Screens/AdminScreenDashbord";
+import AddMachine from "../PopUp/AddMachineForAdmin";
 import RegisterModelPopup from "../PopUp/RegisterModelPopup";
 import ShowAllClient from "../Screens/ShowAllClient";
 import Icon from "react-native-vector-icons/Ionicons";
-import { View, Text, Dimensions, Platform, StyleSheet } from "react-native";
+import { Text, View, Dimensions, Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
@@ -217,13 +134,10 @@ const Tab = createBottomTabNavigator();
 
 export default function SuperAdminTabBar() {
   const insets = useSafeAreaInsets();
-  const backgroundColor = "#1a332f"; // main tab-bar color
-  const screenBg = "#2BFFFF"; // screen background behind bar
-  const androidFiller = "#284a45"; // bottom inset filler
+  const backgroundColor = "#1a332f";
 
   return (
-    <View style={{ flex: 1, backgroundColor: screenBg }}>
-      {/* Bottom inset filler for Android gesture/nav bar */}
+    <View style={{ flex: 1, backgroundColor: "#2BFFFF" }}>
       {Platform.OS === "android" && insets.bottom > 0 && (
         <View
           style={{
@@ -231,7 +145,7 @@ export default function SuperAdminTabBar() {
             bottom: 0,
             height: insets.bottom,
             width: "100%",
-            backgroundColor: androidFiller,
+            backgroundColor: "#284a45",
             zIndex: 100,
           }}
         />
@@ -244,17 +158,18 @@ export default function SuperAdminTabBar() {
           tabBarStyle: {
             position: "absolute",
             paddingTop: height * 0.01,
-            paddingBottom: insets.bottom / 2, // ⬇️ reduced bottom padding
+            paddingBottom: insets.bottom / 2, // 🔽 Reduced bottom padding
             left: width * 0.03,
             right: width * 0.03,
             elevation: 0,
-            backgroundColor,
+            backgroundColor: backgroundColor,
             borderTopLeftRadius: width * 0.04,
             borderTopRightRadius: width * 0.04,
-            height: height * 0.075 + insets.bottom, // ⬇️ slightly shorter bar
-            borderTopWidth: 1, // white separator line
+            height: height * 0.075 + insets.bottom,
+            borderTopWidth: 1,
             borderTopColor: "#FFFFFF",
           },
+
           tabBarIcon: ({ focused }) => {
             let iconName, label;
             if (route.name === "Home") {
@@ -266,9 +181,6 @@ export default function SuperAdminTabBar() {
             } else if (route.name === "RegisterModelPopup") {
               iconName = "log-in-outline";
               label = "Onboarding";
-            } else if (route.name === "ShowAllClient") {
-              iconName = "people-outline";
-              label = "Show Clients";
             }
 
             return (
@@ -300,8 +212,8 @@ export default function SuperAdminTabBar() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="AddMachine" component={AddMachine} />
-        <Tab.Screen name="RegisterModelPopup" component={RegisterModelPopup} />
-        <Tab.Screen name="ShowAllClient" component={ShowAllClient} />
+        {/* <Tab.Screen name="RegisterModelPopup" component={RegisterModelPopup} /> */}
+        {/* <Tab.Screen name="ShowAllClient" component={ShowAllClient} /> */}
       </Tab.Navigator>
     </View>
   );

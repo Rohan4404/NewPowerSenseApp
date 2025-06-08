@@ -105,9 +105,21 @@ const Sidebar = ({
 
           <View style={styles.bottomSpacer} />
 
-          <TouchableOpacity style={styles.navItem} onPress={handleLogoutClick}>
+          {/* <TouchableOpacity style={styles.navItem} onPress={handleLogoutClick}>
             <MaterialIcons name="logout" size={22} color="#00E6E6" />
             <Text style={styles.navText}>Logout</Text>
+          </TouchableOpacity> */}
+
+          <TouchableOpacity style={styles.navItem} onPress={handleLogoutClick}>
+            <MaterialIcons name="logout" size={22} color="#00E6E6" />
+            <Text
+              style={styles.navText}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              allowFontScaling={false}
+            >
+              Logout
+            </Text>
           </TouchableOpacity>
         </ScrollView>
       </Animated.View>
@@ -147,17 +159,33 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 30,
   },
+  // navItem: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   marginVertical: 15,
+  //   padding: 5,
+  //   borderRadius: 4,
+  // },
+  // navText: {
+  //   color: "#FFFFFF",
+  //   fontSize: 16,
+  //   marginLeft: 10,
+  // },
   navItem: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 15,
     padding: 5,
     borderRadius: 4,
+    flexWrap: "nowrap", // ensures row doesn't wrap
   },
+
   navText: {
     color: "#FFFFFF",
     fontSize: 16,
     marginLeft: 10,
+    flexShrink: 1,
+    maxWidth: "90%",
   },
   bottomSpacer: {
     flex: 1,

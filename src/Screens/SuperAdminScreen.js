@@ -1,4 +1,4 @@
-// new card render
+// // new card render
 
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -71,7 +71,7 @@ const SuperAdminScreen = ({ route }) => {
   // Handle refresh when navigating from AddMachine
   useEffect(() => {
     if (route?.params?.refresh) {
-      console.log("Refreshing SuperAdmin data due to new machine addition");
+      // console.log("Refreshing SuperAdmin data due to new machine addition");
       setRefreshTrigger((prev) => prev + 1);
       navigation.setParams({ refresh: false });
     }
@@ -80,7 +80,7 @@ const SuperAdminScreen = ({ route }) => {
   // Use useFocusEffect to refresh data when screen comes into focus
   useFocusEffect(
     useCallback(() => {
-      console.log("SuperAdmin screen focused, refreshing data");
+      // console.log("SuperAdmin screen focused, refreshing data");
       setRefreshTrigger((prev) => prev + 1);
     }, [])
   );
@@ -92,17 +92,17 @@ const SuperAdminScreen = ({ route }) => {
     const fetchClientsData = async () => {
       setIsLoadingClients(true);
       try {
-        console.log("🔄 Fetching clients...");
+        // console.log("🔄 Fetching clients...");
         const clientsResponse = await getAllClients();
-        console.log("📊 Clients response:", clientsResponse);
+        // console.log("📊 Clients response:", clientsResponse);
 
         if (clientsResponse.success && Array.isArray(clientsResponse.data)) {
           if (!isMounted) return;
-          console.log(
-            "✅ Clients loaded:",
-            clientsResponse.data.length,
-            "clients"
-          );
+          // console.log(
+          //   "✅ Clients loaded:",
+          //   clientsResponse.data.length,
+          //   "clients"
+          // );
           setClients(clientsResponse.data);
           return;
         }
@@ -134,13 +134,13 @@ const SuperAdminScreen = ({ route }) => {
   useEffect(() => {
     const fetchMachines = async () => {
       if (clients.length === 0) {
-        console.log("⏳ No clients available yet, skipping machine fetch");
+        // console.log("⏳ No clients available yet, skipping machine fetch");
         return;
       }
 
-      console.log("🔄 Starting machine fetch...");
-      console.log("👥 Available clients:", clients.length);
-      console.log("🎯 Selected client ID:", selectedClientId);
+      // console.log("🔄 Starting machine fetch...");
+      // console.log("👥 Available clients:", clients.length);
+      // console.log("🎯 Selected client ID:", selectedClientId);
 
       setIsLoadingMachines(true);
       try {
@@ -148,18 +148,18 @@ const SuperAdminScreen = ({ route }) => {
 
         if (!selectedClientId) {
           // Fetch machines from all clients
-          console.log("🌐 Fetching machines from ALL clients");
+          // console.log("🌐 Fetching machines from ALL clients");
 
           for (const client of clients) {
             try {
-              console.log(
-                `🔍 Fetching machines for client: ${client.client_id} (${client.organization_name})`
-              );
+              // console.log(
+              //   `🔍 Fetching machines for client: ${client.client_id} (${client.organization_name})`
+              // );
               const machinesResponse = await getMachineById(client.client_id);
-              console.log(
-                `📋 Response for client ${client.client_id}:`,
-                machinesResponse
-              );
+              // console.log(
+              //   `📋 Response for client ${client.client_id}:`,
+              //   machinesResponse
+              // );
 
               if (
                 machinesResponse.success &&
@@ -170,14 +170,14 @@ const SuperAdminScreen = ({ route }) => {
                   client_name: client.organization_name,
                   client_id: client.client_id,
                 }));
-                console.log(
-                  `✅ Found ${clientMachines.length} machines for ${client.organization_name}`
-                );
+                // console.log(
+                //   `✅ Found ${clientMachines.length} machines for ${client.organization_name}`
+                // );
                 allMachinesData.push(...clientMachines);
               } else {
-                console.log(
-                  `⚠️ No machines found for client ${client.client_id}`
-                );
+                // console.log(
+                //   `⚠️ No machines found for client ${client.client_id}`
+                // );
               }
             } catch (error) {
               console.error(
@@ -188,12 +188,12 @@ const SuperAdminScreen = ({ route }) => {
           }
         } else {
           // Fetch machines for specific client
-          console.log(
-            "🎯 Fetching machines for specific client:",
-            selectedClientId
-          );
+          // console.log(
+          //   "🎯 Fetching machines for specific client:",
+          //   selectedClientId
+          // );
           const machinesResponse = await getMachineById(selectedClientId);
-          console.log("📋 Specific client response:", machinesResponse);
+          // console.log("📋 Specific client response:", machinesResponse);
 
           if (
             machinesResponse.success &&
@@ -207,14 +207,14 @@ const SuperAdminScreen = ({ route }) => {
               client_name: selectedClient?.organization_name || "Unknown",
               client_id: selectedClientId,
             }));
-            console.log(
-              `✅ Found ${allMachinesData.length} machines for selected client`
-            );
+            // console.log(
+            //   `✅ Found ${allMachinesData.length} machines for selected client`
+            // );
           }
         }
 
-        console.log("🎉 TOTAL MACHINES LOADED:", allMachinesData.length);
-        console.log("📊 Machines data sample:", allMachinesData.slice(0, 2));
+        // console.log("🎉 TOTAL MACHINES LOADED:", allMachinesData.length);
+        // console.log("📊 Machines data sample:", allMachinesData.slice(0, 2));
 
         setMachines(allMachinesData);
       } catch (error) {
@@ -229,7 +229,7 @@ const SuperAdminScreen = ({ route }) => {
         setMachines([]);
       } finally {
         setIsLoadingMachines(false);
-        console.log("✅ Machine loading completed");
+        // console.log("✅ Machine loading completed");
       }
     };
 
@@ -299,12 +299,12 @@ const SuperAdminScreen = ({ route }) => {
   };
 
   const renderMachineCard = ({ item: machine, index }) => {
-    console.log(
-      "🎨 Rendering machine card:",
-      machine.machine_name,
-      "Index:",
-      index
-    );
+    // console.log(
+    //   "🎨 Rendering machine card:",
+    //   machine.machine_name,
+    //   "Index:",
+    //   index
+    // );
     return (
       <TouchableOpacity
         style={styles.machineCard}
@@ -362,7 +362,7 @@ const SuperAdminScreen = ({ route }) => {
       </View>
       <View style={[styles.tableCell, styles.apiCell]}>
         <Text style={styles.apiText} numberOfLines={3}>
-          https://api1.systaldyn.svc:8080/api/v1/data/{machine.table_name}
+          https://api1.systaldyn.xyz:6901/api/sensor/data/{machine.table_name}
         </Text>
       </View>
     </View>
@@ -422,10 +422,10 @@ const SuperAdminScreen = ({ route }) => {
                   <Picker
                     selectedValue={selectedClientId}
                     onValueChange={(value) => {
-                      console.log(
-                        "🎯 Picker changed - Selected client ID:",
-                        value
-                      );
+                      // console.log(
+                      //   "🎯 Picker changed - Selected client ID:",
+                      //   value
+                      // );
                       setSelectedClientId(value);
                     }}
                     style={styles.picker}
@@ -1023,7 +1023,7 @@ export default SuperAdminScreen;
 //       setIsLoadingClients(true);
 //       try {
 //         const clientsResponse = await getAllClients();
-//         console.log("Clients response super admin:", clientsResponse.data);
+//         // console.log("Clients response super admin:", clientsResponse.data);
 
 //         if (clientsResponse.success && Array.isArray(clientsResponse.data)) {
 //           if (!isMounted) return;
@@ -1068,7 +1068,7 @@ export default SuperAdminScreen;
 //       try {
 //         setIsLoadingMachines(true);
 //         const machinesResponse = await getMachineById(clientId);
-//         console.log("Machines fetched by client:", machinesResponse.data);
+//         // console.log("Machines fetched by client:", machinesResponse.data);
 //         if (machinesResponse.success && Array.isArray(machinesResponse?.data)) {
 //           setMachines(machinesResponse.data);
 //         } else {

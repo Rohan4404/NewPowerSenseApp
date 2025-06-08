@@ -12,6 +12,7 @@ import ForgetPasswordScreen from "./src/Screens/ForgetPasswordScreen";
 import ResetPasswordScreen from "./src/Screens/ResetPasswordScreen";
 import ShowAllClient from "./src/Screens/ShowAllClient";
 import SuperAdminTabBar from "./src/TabBar/SuperAdminTabBar";
+import AdminTabbar from "./src/TabBar/AdminTabbar";
 import MachineDetaild from "./src/Screens/MachineDetaild";
 import MachineCurrentScreen from "./src/MachineDataInfo/MachineCurrentScreen";
 import MachinePowerScreen from "./src/MachineDataInfo/MachinePowerScreen";
@@ -50,6 +51,12 @@ export default function App() {
         <Stack.Screen
           name="SuperAdminTabBar"
           component={SuperAdminTabBar}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="AdminTabBar"
+          component={AdminTabbar}
           options={{ headerShown: false }}
         />
 

@@ -509,23 +509,81 @@ const SuperAdminScreen = ({ route }) => {
                   </Text>
                 </View>
               ) : (
+                // <View style={styles.machinesContainer}>
+                //   <FlatList
+                //     data={machines}
+                //     renderItem={renderMachineCard}
+                //     keyExtractor={(item, index) =>
+                //       `machine_${item.machine_id}_${index}`
+                //     }
+                //     showsVerticalScrollIndicator={true}
+                //     nestedScrollEnabled={true}
+                //     style={styles.machinesList}
+                //     contentContainerStyle={styles.machinesListContent}
+                //     scrollEnabled={true}
+                //     removeClippedSubviews={false}
+                //     initialNumToRender={10}
+                //     maxToRenderPerBatch={10}
+                //     windowSize={10}
+                //   />
+                // </View>
+
                 <View style={styles.machinesContainer}>
-                  <FlatList
-                    data={machines}
-                    renderItem={renderMachineCard}
-                    keyExtractor={(item, index) =>
-                      `machine_${item.machine_id}_${index}`
-                    }
-                    showsVerticalScrollIndicator={true}
-                    nestedScrollEnabled={true}
+                  <ScrollView
                     style={styles.machinesList}
                     contentContainerStyle={styles.machinesListContent}
-                    scrollEnabled={true}
-                    removeClippedSubviews={false}
-                    initialNumToRender={10}
-                    maxToRenderPerBatch={10}
-                    windowSize={10}
-                  />
+                    showsVerticalScrollIndicator={true}
+                    nestedScrollEnabled={true}
+                  >
+                    {machines.map((machine, index) => (
+                      <TouchableOpacity
+                        key={`machine_${machine.machine_id}_${index}`}
+                        style={styles.machineCard}
+                        onPress={() => handleMachineCardClick(machine)}
+                        activeOpacity={0.8}
+                      >
+                        <View style={styles.machineCardContent}>
+                          <View style={styles.machineIconContainer}>
+                            <MaterialIcons
+                              name="precision-manufacturing"
+                              size={width * 0.08}
+                              color="#00C4B4"
+                            />
+                          </View>
+                          <View style={styles.machineTextContainer}>
+                            <Text style={styles.machineNameText}>
+                              {machine.machine_name}
+                            </Text>
+                            {!selectedClientId && (
+                              <Text style={styles.clientNameText}>
+                                {machine.client_name || "Unknown Client"}
+                              </Text>
+                            )}
+                          </View>
+                        </View>
+                        {selectedClientId && (
+                          <TouchableOpacity
+                            style={styles.deleteButton}
+                            onPress={() => {
+                              setMachineToDelete(machine);
+                              setShowDeleteModalVisible(true);
+                            }}
+                            hitSlop={{
+                              top: 10,
+                              bottom: 10,
+                              left: 10,
+                              right: 10,
+                            }}
+                          >
+                            <MaterialIcons
+                              name="delete"
+                              style={styles.deleteIcon}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
                 </View>
               )}
             </View>

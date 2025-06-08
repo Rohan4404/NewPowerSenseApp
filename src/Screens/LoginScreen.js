@@ -24,8 +24,10 @@
 
 // const LoginPage = () => {
 //   const [emailOrPhone, setEmailOrPhone] = useState("");
+//   // const [password, setPasswordVisible] = useState("");
 //   const [password, setPassword] = useState("");
-//   const [rememberMe, setRememberMe] = useState(false);
+//   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // New state for password visibility
+//   const [rememberMe] = useState(false);
 //   const [isLoading, setIsLoading] = useState(false);
 //   const navigation = useNavigation();
 
@@ -40,50 +42,65 @@
 //   useEffect(() => {
 //     const loadSavedData = async () => {
 //       try {
+//         /* -------- 1. Load remembered email / phone -------- */
 //         const savedValue = await AsyncStorage.getItem("savedEmailOrPhone");
-//         console.log("Loaded savedEmailOrPhone:", savedValue);
+
 //         if (savedValue) {
 //           setEmailOrPhone(savedValue);
 //           setRememberMe(true);
+
 //           Toast.show({
 //             type: "info",
-//             text1: "Loaded saved email/phone.",
+//             text1: "Loaded saved email or phone",
 //             position: "top",
-//             autoHide: true,
 //             visibilityTime: 2000,
+//             topOffset: height * 0.05,
+//             text1Style: { fontSize: width * 0.04, color: "#333" },
+//             style: {
+//               backgroundColor: "#FFFFFF",
+//               borderWidth: 1,
+//               borderColor: "#00FFFF",
+//             },
 //           });
 //         }
 
+//         /* -------- 2. Check for token and redirect -------- */
 //         const token =
 //           (await AsyncStorage.getItem("token")) ||
 //           (await AsyncStorage.getItem("sessionToken"));
+
 //         if (token) {
 //           try {
-//             console.log("Token found:", token);
-//             const decodedToken = jwtDecode(token);
-//             console.log("Decoded token:", decodedToken);
-//             const role = decodedToken.role;
+//             const { role } = jwtDecode(token);
+
 //             if (role === "admin") {
 //               navigation.replace("AdminTabBar");
 //               return;
-//             } else if (role === "manager") {
+//             }
+//             if (role === "manager") {
 //               navigation.replace("SuperAdminTabBar");
 //               return;
 //             }
-//           } catch (err) {
-//             console.error("Token decode error:", err);
-//             await AsyncStorage.removeItem("token");
-//             await AsyncStorage.removeItem("sessionToken");
+//           } catch (decodeErr) {
+//             console.error("Token decode error:", decodeErr);
+//             await AsyncStorage.multiRemove(["token", "sessionToken"]);
 //           }
 //         }
 //       } catch (err) {
+//         /* -------- 3. Generic error handling -------- */
 //         console.error("Error loading saved data:", err);
 //         Toast.show({
 //           type: "error",
-//           text1: "Error loading saved data.",
+//           text1: "Error loading saved data",
 //           position: "top",
-//           autoHide: true,
 //           visibilityTime: 3000,
+//           topOffset: height * 0.05,
+//           text1Style: { fontSize: width * 0.04, color: "#000000" },
+//           style: {
+//             backgroundColor: "#000000",
+//             borderWidth: 1,
+//             borderColor: "#FF5555",
+//           },
 //         });
 //       }
 //     };
@@ -92,16 +109,26 @@
 //   }, [navigation]);
 
 //   const handleLogin = async () => {
-//     console.log("handleLogin started");
+//     console.log("handle login started");
 
 //     // Input validation
 //     if (!emailOrPhone || !password) {
 //       Toast.show({
 //         type: "error",
-//         text1: "Please enter both email/phone and password.",
+//         text1: "Please enter both email/phone number and password",
 //         position: "top",
 //         autoHide: true,
 //         visibilityTime: 3000,
+//         topOffset: height * 0.05,
+//         text1Style: {
+//           fontSize: width * 0.04,
+//           color: "#000000",
+//         },
+//         style: {
+//           backgroundColor: "#000000",
+//           borderWidth: 1,
+//           borderColor: "#FF5555",
+//         },
 //       });
 //       return;
 //     }
@@ -128,7 +155,6 @@
 
 //         // Store in AsyncStorage
 //         await AsyncStorage.setItem("userId", userId.toString());
-//         await AsyncStorage.setItem("clientId", clientId.toString());
 //         if (userID) await AsyncStorage.setItem("userID", userID.toString());
 //         if (clientId)
 //           await AsyncStorage.setItem("clientId", clientId.toString());
@@ -142,10 +168,20 @@
 //           console.log("Saved emailOrPhone:", emailOrPhone);
 //           Toast.show({
 //             type: "info",
-//             text1: "Email/phone saved for next login.",
+//             text1: "Email or phone saved for next login",
 //             position: "top",
 //             autoHide: true,
 //             visibilityTime: 2000,
+//             topOffset: height * 0.05,
+//             text1Style: {
+//               fontSize: width * 0.04,
+//               color: "#333",
+//             },
+//             style: {
+//               backgroundColor: "#FFFFFF",
+//               borderWidth: 1,
+//               borderColor: "#00FFFF",
+//             },
 //           });
 //         } else {
 //           await AsyncStorage.removeItem("savedEmailOrPhone");
@@ -154,10 +190,20 @@
 
 //         Toast.show({
 //           type: "success",
-//           text1: "Login successful!",
+//           text1: "Login successful",
 //           position: "top",
 //           autoHide: true,
 //           visibilityTime: 2000,
+//           topOffset: height * 0.05,
+//           text1Style: {
+//             fontSize: width * 0.04,
+//             color: "#000000",
+//           },
+//           style: {
+//             backgroundColor: "#00FFD1",
+//             borderWidth: 1,
+//             borderColor: "#2BFFFF",
+//           },
 //         });
 
 //         console.log(
@@ -172,35 +218,70 @@
 //         } else {
 //           Toast.show({
 //             type: "error",
-//             text1: "Unknown role!",
+//             text1: "Unknown role",
 //             position: "top",
 //             autoHide: true,
 //             visibilityTime: 3000,
+//             topOffset: height * 0.05,
+//             text1Style: {
+//               fontSize: width * 0.04,
+//               color: "#000000",
+//             },
+//             style: {
+//               backgroundColor: "#000000",
+//               borderWidth: 1,
+//               borderColor: "#FF5555",
+//             },
 //           });
 //         }
 //       } else {
 //         console.log("Login failed or token missing:", response);
 //         Toast.show({
 //           type: "error",
-//           text1: response.error || "Login failed. Please try again.",
+//           text1: response.error || "Login failed. Please try again",
 //           position: "top",
 //           autoHide: true,
 //           visibilityTime: 3000,
+//           topOffset: height * 0.05,
+//           text1Style: {
+//             fontSize: width * 0.04,
+//             color: "#000000",
+//           },
+//           style: {
+//             backgroundColor: "#000000",
+//             borderWidth: 1,
+//             borderColor: "#FF5555",
+//           },
 //         });
 //       }
 //     } catch (error) {
 //       console.error("Login error caught:", error);
-//       const apiError = error.message || "An unexpected error occurred.";
+//       const apiError = error.message || "An unexpected error occurred";
 //       Toast.show({
 //         type: "error",
 //         text1: apiError,
 //         position: "top",
 //         autoHide: true,
 //         visibilityTime: 3000,
+//         topOffset: height * 0.05,
+//         text1Style: {
+//           fontSize: width * 0.04,
+//           color: "#000000",
+//         },
+//         style: {
+//           backgroundColor: "#000000",
+//           borderWidth: 1,
+//           borderColor: "#FF5555",
+//         },
 //       });
 //     } finally {
 //       setIsLoading(false);
 //     }
+//   };
+
+//   // Toggle password visibility
+//   const togglePasswordVisibility = () => {
+//     setIsPasswordVisible(!isPasswordVisible);
 //   };
 
 //   return (
@@ -235,15 +316,27 @@
 //             autoCapitalize="none"
 //           />
 
-//           <TextInput
-//             style={styles.input}
-//             placeholder="Enter your password"
-//             placeholderTextColor="#888"
-//             value={password}
-//             onChangeText={setPassword}
-//             secureTextEntry
-//             editable={!isLoading}
-//           />
+//           <View style={styles.passwordContainer}>
+//             <TextInput
+//               style={styles.passwordInput}
+//               placeholder="Enter your password"
+//               placeholderTextColor="#888"
+//               value={password}
+//               onChangeText={setPassword}
+//               secureTextEntry={!isPasswordVisible}
+//               editable={!isLoading}
+//             />
+//             <TouchableOpacity
+//               style={styles.eyeIcon}
+//               onPress={togglePasswordVisibility}
+//             >
+//               <MaterialIcons
+//                 name={isPasswordVisible ? "visibility" : "visibility-off"}
+//                 size={width * 0.06}
+//                 color="#FFFFFF"
+//               />
+//             </TouchableOpacity>
+//           </View>
 
 //           <View style={styles.optionsContainer}>
 //             <View style={styles.rememberMeContainer}>
@@ -268,19 +361,12 @@
 //                 <Text style={styles.rememberMeText}>Remember Me</Text>
 //               </TouchableOpacity>
 //             </View>
-//             {/* <Text
-//               style={styles.forgotPassword}
-//               onPress={() => navigation.navigate("ForgetPassword")}
-//             >
-//               Forgot Password?
-//             </Text> */}
-
 //             <Text
 //               style={styles.forgotPassword}
 //               onPress={() => navigation.navigate("ForgetPassword")}
 //               numberOfLines={1}
 //               adjustsFontSizeToFit
-//               allowFontScaling={false} // optional
+//               allowFontScaling={false}
 //             >
 //               Forgot Password?
 //             </Text>
@@ -336,7 +422,6 @@
 //   },
 //   formContainer: {
 //     width: width * 0.9,
-//     // alignItems: "center",
 //   },
 //   logo: {
 //     width: width * 0.25,
@@ -367,6 +452,26 @@
 //     color: "#ffffff",
 //     fontSize: width * 0.04 > 16 ? 16 : width * 0.04,
 //     backgroundColor: "transparent",
+//   },
+//   passwordContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     width: "100%",
+//     marginBottom: height * 0.02,
+//     borderRadius: 8,
+//     borderWidth: 1,
+//     borderColor: "#ffffff",
+//     backgroundColor: "transparent",
+//   },
+//   passwordInput: {
+//     flex: 1,
+//     padding: width * 0.04,
+//     color: "#ffffff",
+//     fontSize: width * 0.04 > 16 ? 16 : width * 0.04,
+//     backgroundColor: "transparent",
+//   },
+//   eyeIcon: {
+//     padding: width * 0.03,
 //   },
 //   optionsContainer: {
 //     flexDirection: "row",
@@ -399,18 +504,12 @@
 //     color: "#ffffff",
 //     fontSize: width * 0.04 > 14 ? 14 : width * 0.04,
 //   },
-//   // forgotPassword: {
-//   //   color: "#00D1D1",
-//   //   fontSize: width * 0.035 > 12 ? 12 : width * 0.035,
-//   //   textDecorationLine: "underline",
-//   // },
-
 //   forgotPassword: {
 //     color: "#00D1D1",
-//     fontSize: width * 0.035 > 12 ? width * 0.035 : 12, // fix condition
+//     fontSize: width * 0.035 > 12 ? 12 : width * 0.035,
 //     textDecorationLine: "underline",
 //     flexShrink: 1,
-//     maxWidth: "100%", // prevents overflow
+//     maxWidth: "100%",
 //   },
 //   loginButton: {
 //     width: "100%",
@@ -465,10 +564,9 @@ const { width, height } = Dimensions.get("window");
 
 const LoginPage = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  // const [password, setPasswordVisible] = useState("");
   const [password, setPassword] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // New state for password visibility
-  const [rememberMe] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false); // ✅ Fixed: Added setRememberMe
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -500,7 +598,7 @@ const LoginPage = () => {
             style: {
               backgroundColor: "#FFFFFF",
               borderWidth: 1,
-              borderColor: "#00FFFF",
+              borderColor: "#00D1D1", // Updated to match your color scheme
             },
           });
         }
@@ -621,7 +719,7 @@ const LoginPage = () => {
             style: {
               backgroundColor: "#FFFFFF",
               borderWidth: 1,
-              borderColor: "#00FFFF",
+              borderColor: "#00D1D1", // Updated color
             },
           });
         } else {
@@ -641,9 +739,9 @@ const LoginPage = () => {
             color: "#000000",
           },
           style: {
-            backgroundColor: "#00FFD1",
+            backgroundColor: "#00D1D1", // Updated to match your theme
             borderWidth: 1,
-            borderColor: "#2BFFFF",
+            borderColor: "#00A3A3",
           },
         });
 
@@ -727,7 +825,12 @@ const LoginPage = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent={true}
+      />
+      {/* ✅ Fixed: Custom status bar background instead of using StatusBar backgroundColor */}
       <View style={styles.statusBarBackground} />
       <KeyboardAvoidingView
         style={styles.container}
@@ -782,7 +885,7 @@ const LoginPage = () => {
           <View style={styles.optionsContainer}>
             <View style={styles.rememberMeContainer}>
               <TouchableOpacity
-                onPress={() => setRememberMe(!rememberMe)}
+                onPress={() => setRememberMe(!rememberMe)} // ✅ Now works correctly
                 style={styles.checkboxContainer}
               >
                 <View
@@ -868,6 +971,7 @@ const styles = StyleSheet.create({
     width: width * 0.25,
     height: width * 0.25,
     marginBottom: height * 0.02,
+    tintColor: "#00D1D1", // ✅ Added tint to match your theme
   },
   title: {
     fontSize: width * 0.12 > 48 ? 48 : width * 0.12,
@@ -937,9 +1041,11 @@ const styles = StyleSheet.create({
     marginRight: width * 0.02,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 2, // ✅ Added slight border radius for better look
   },
   checkboxChecked: {
     backgroundColor: "#00D1D1",
+    borderColor: "#00D1D1", // ✅ Match border color when checked
   },
   rememberMeText: {
     color: "#ffffff",

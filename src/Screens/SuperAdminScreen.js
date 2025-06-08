@@ -50,6 +50,42 @@ const SuperAdminScreen = ({ route }) => {
     setIsSidebarVisible(false);
   };
 
+  // const handleLogoutClick = async () => {
+  //   try {
+  //     await AsyncStorage.multiRemove([
+  //       "token",
+  //       "sessionToken",
+  //       "userId",
+  //       "role",
+  //       "userID",
+  //       "clientId",
+  //       "savedEmailOrPhone",
+  //     ]);
+  //     navigation.replace("Login");
+  //   } catch (err) {
+  //     console.error("Logout error:", err);
+  //   }
+  //   setIsSidebarVisible(false);
+  // };
+
+  // Handle refresh when navigating from AddMachine
+
+  // Separate function to clear saved login credentials
+  const handleClearSavedLogin = async () => {
+    try {
+      await AsyncStorage.removeItem("savedEmailOrPhone");
+      Toast.show({
+        type: "info",
+        text1: "Saved login credentials cleared",
+        position: "top",
+        visibilityTime: 2000,
+      });
+    } catch (err) {
+      console.error("Error clearing saved login:", err);
+    }
+  };
+
+  // Regular logout - keeps saved email/phone
   const handleLogoutClick = async () => {
     try {
       await AsyncStorage.multiRemove([
@@ -59,7 +95,6 @@ const SuperAdminScreen = ({ route }) => {
         "role",
         "userID",
         "clientId",
-        "savedEmailOrPhone",
       ]);
       navigation.replace("Login");
     } catch (err) {
@@ -68,7 +103,6 @@ const SuperAdminScreen = ({ route }) => {
     setIsSidebarVisible(false);
   };
 
-  // Handle refresh when navigating from AddMachine
   useEffect(() => {
     if (route?.params?.refresh) {
       // console.log("Refreshing SuperAdmin data due to new machine addition");

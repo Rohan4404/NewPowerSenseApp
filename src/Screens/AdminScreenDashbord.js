@@ -1048,6 +1048,41 @@ const AdminScreen = ({ route }) => {
     setIsSidebarVisible(false);
   };
 
+  //   const handleLogoutClick = async () => {
+  //     try {
+  //       await AsyncStorage.multiRemove([
+  //         "token",
+  //         "sessionToken",
+  //         "userId",
+  //         "role",
+  //         "userID",
+  //         "clientId",
+  //         "savedEmailOrPhone",
+  //       ]);
+  //       navigation.replace("Login");
+  //     } catch (err) {
+  //       console.error("Logout error:", err);
+  //     }
+  //     setIsSidebarVisible(false);
+  //   };
+
+  // Handle refresh when navigating from AddMachine
+
+  const handleClearSavedLogin = async () => {
+    try {
+      await AsyncStorage.removeItem("savedEmailOrPhone");
+      Toast.show({
+        type: "info",
+        text1: "Saved login credentials cleared",
+        position: "top",
+        visibilityTime: 2000,
+      });
+    } catch (err) {
+      console.error("Error clearing saved login:", err);
+    }
+  };
+
+  // Regular logout - keeps saved email/phone
   const handleLogoutClick = async () => {
     try {
       await AsyncStorage.multiRemove([
@@ -1057,7 +1092,6 @@ const AdminScreen = ({ route }) => {
         "role",
         "userID",
         "clientId",
-        "savedEmailOrPhone",
       ]);
       navigation.replace("Login");
     } catch (err) {
@@ -1066,7 +1100,6 @@ const AdminScreen = ({ route }) => {
     setIsSidebarVisible(false);
   };
 
-  // Handle refresh when navigating from AddMachine
   useEffect(() => {
     if (route?.params?.refresh) {
       setRefreshTrigger((prev) => prev + 1);

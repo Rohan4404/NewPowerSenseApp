@@ -916,36 +916,68 @@ const Sidebar = ({ visible, onClose, handleHomeClick, navigation }) => {
     })
   ).current;
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("sessionToken");
-      await AsyncStorage.removeItem("userId");
-      await AsyncStorage.removeItem("userID");
-      await AsyncStorage.removeItem("clientId");
-      await AsyncStorage.removeItem("role");
-      await AsyncStorage.removeItem("savedEmailOrPhone");
+  // const handleLogout = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem("token");
+  //     await AsyncStorage.removeItem("sessionToken");
+  //     await AsyncStorage.removeItem("userId");
+  //     await AsyncStorage.removeItem("userID");
+  //     await AsyncStorage.removeItem("clientId");
+  //     await AsyncStorage.removeItem("role");
+  //     await AsyncStorage.removeItem("savedEmailOrPhone");
 
+  //     Toast.show({
+  //       type: "success",
+  //       text1: "Logged out successfully!",
+  //       position: "top",
+  //       autoHide: true,
+  //       visibilityTime: 2000,
+  //     });
+
+  //     navigation.replace("Login");
+  //   } catch (error) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error logging out. Please try again.",
+  //       position: "top",
+  //       autoHide: true,
+  //       visibilityTime: 3000,
+  //     });
+  //   } finally {
+  //     onClose();
+  //   }
+  // };
+
+  const handleClearSavedLogin = async () => {
+    try {
+      await AsyncStorage.removeItem("savedEmailOrPhone");
       Toast.show({
-        type: "success",
-        text1: "Logged out successfully!",
+        type: "info",
+        text1: "Saved login credentials cleared",
         position: "top",
-        autoHide: true,
         visibilityTime: 2000,
       });
-
-      navigation.replace("Login");
-    } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "Error logging out. Please try again.",
-        position: "top",
-        autoHide: true,
-        visibilityTime: 3000,
-      });
-    } finally {
-      onClose();
+    } catch (err) {
+      console.error("Error clearing saved login:", err);
     }
+  };
+
+  // Regular logout - keeps saved email/phone
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.multiRemove([
+        "token",
+        "sessionToken",
+        "userId",
+        "role",
+        "userID",
+        "clientId",
+      ]);
+      navigation.replace("Login");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+    setIsSidebarVisible(false);
   };
 
   return visible ? (

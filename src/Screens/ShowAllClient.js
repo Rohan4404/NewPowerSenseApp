@@ -429,6 +429,39 @@ const ShowAllClientData = ({ route, onClose }) => {
     setSidebarVisible(false);
   };
 
+  // const handleLogoutClick = async () => {
+  //   try {
+  //     await AsyncStorage.multiRemove([
+  //       "token",
+  //       "sessionToken",
+  //       "userId",
+  //       "role",
+  //       "userID",
+  //       "clientId",
+  //       "savedEmailOrPhone",
+  //     ]);
+  //     navigation.replace("Login");
+  //   } catch (err) {
+  //     console.error("Logout error:", err);
+  //   }
+  //   setSidebarVisible(false);
+  // };
+
+  const handleClearSavedLogin = async () => {
+    try {
+      await AsyncStorage.removeItem("savedEmailOrPhone");
+      Toast.show({
+        type: "info",
+        text1: "Saved login credentials cleared",
+        position: "top",
+        visibilityTime: 2000,
+      });
+    } catch (err) {
+      console.error("Error clearing saved login:", err);
+    }
+  };
+
+  // Regular logout - keeps saved email/phone
   const handleLogoutClick = async () => {
     try {
       await AsyncStorage.multiRemove([
@@ -438,13 +471,12 @@ const ShowAllClientData = ({ route, onClose }) => {
         "role",
         "userID",
         "clientId",
-        "savedEmailOrPhone",
       ]);
       navigation.replace("Login");
     } catch (err) {
       console.error("Logout error:", err);
     }
-    setSidebarVisible(false);
+    setIsSidebarVisible(false);
   };
 
   const renderTableHeader = () => (

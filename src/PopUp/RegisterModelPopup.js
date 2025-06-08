@@ -126,6 +126,38 @@ const RegisterModal = ({ onClose, setApiCall }) => {
     navigation.goBack();
     setIsSidebarVisible(false);
   };
+  // const handleLogoutClick = async () => {
+  //   try {
+  //     await AsyncStorage.multiRemove([
+  //       "token",
+  //       "sessionToken",
+  //       "userId",
+  //       "role",
+  //       "userID",
+  //       "clientId",
+  //       "savedEmailOrPhone",
+  //     ]);
+  //     navigation.replace("Login");
+  //   } catch (err) {
+  //     console.error("Logout error:", err);
+  //   }
+  //   setSidebarVisible(false);
+  // };
+  const handleClearSavedLogin = async () => {
+    try {
+      await AsyncStorage.removeItem("savedEmailOrPhone");
+      Toast.show({
+        type: "info",
+        text1: "Saved login credentials cleared",
+        position: "top",
+        visibilityTime: 2000,
+      });
+    } catch (err) {
+      console.error("Error clearing saved login:", err);
+    }
+  };
+
+  // Regular logout - keeps saved email/phone
   const handleLogoutClick = async () => {
     try {
       await AsyncStorage.multiRemove([
@@ -135,14 +167,14 @@ const RegisterModal = ({ onClose, setApiCall }) => {
         "role",
         "userID",
         "clientId",
-        "savedEmailOrPhone",
       ]);
       navigation.replace("Login");
     } catch (err) {
       console.error("Logout error:", err);
     }
-    setSidebarVisible(false);
+    setIsSidebarVisible(false);
   };
+
   return (
     <ImageBackground
       source={require("../../assets/Rectangle.jpg")}

@@ -443,7 +443,7 @@ const MachinePeakPowerScreen = () => {
           marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
       ]}
-      style={[styles.scrollView, { backgroundColor: "#111" }]}
+      style={[styles.scrollView, { flex: 1, backgroundColor: "#121212" }]}
     >
       <StatusBar translucent backgroundColor="transparent" style="light" />
       <TouchableOpacity
@@ -680,7 +680,8 @@ const styles = StyleSheet.create({
     minHeight: "100%",
   },
   scrollView: {
-    backgroundColor: "black",
+    flex: 1,
+    backgroundColor: "#121212",
   },
   imageContainer: {
     width: "100%",

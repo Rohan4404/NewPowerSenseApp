@@ -151,6 +151,16 @@ const SuperAdminScreen = ({ route }) => {
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.1,
+
+          text1Style: {
+            fontSize: width * 0.04,
+            color: "#000000",
+          },
+          style: {
+            backgroundColor: "#000000",
+            borderWidth: 1,
+            borderColor: "#FF5555",
+          },
         });
       } finally {
         if (isMounted) setIsLoadingClients(false);
@@ -259,6 +269,16 @@ const SuperAdminScreen = ({ route }) => {
           position: "top",
           visibilityTime: 3000,
           topOffset: height * 0.1,
+
+          text1Style: {
+            fontSize: width * 0.04,
+            color: "#000000",
+          },
+          style: {
+            backgroundColor: "#000000",
+            borderWidth: 1,
+            borderColor: "#FF5555",
+          },
         });
         setMachines([]);
       } finally {
@@ -709,6 +729,16 @@ const SuperAdminScreen = ({ route }) => {
                         position: "top",
                         visibilityTime: 3000,
                         topOffset: height * 0.1,
+
+                        text1Style: {
+                          fontSize: width * 0.04,
+                          color: "#000000",
+                        },
+                        style: {
+                          backgroundColor: "#000000",
+                          borderWidth: 1,
+                          borderColor: "#FF5555",
+                        },
                       });
                     } finally {
                       setShowDeleteModalVisible(false);

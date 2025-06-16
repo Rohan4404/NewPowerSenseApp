@@ -498,7 +498,8 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   scrollView: {
-    backgroundColor: "black",
+    flex: 1,
+    backgroundColor: "#121212",
   },
   chartWrapper: {
     borderWidth: 1,

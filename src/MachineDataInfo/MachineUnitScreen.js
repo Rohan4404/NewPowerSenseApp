@@ -1196,7 +1196,7 @@ const MachineUnitScreen = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#111",
+    backgroundColor: "#121212",
   },
   container: {
     alignItems: "stretch",
